@@ -9,7 +9,9 @@ module.exports = function () {
     app.use(bodyParser.json());
 
     consign()
-        .include('routes')
+        .include('models')
+        .then('services')
+        .then('routes')
         .into(app);
 
     return app;
