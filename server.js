@@ -1,5 +1,5 @@
 var http = require('http');
-var app = require('./conf/custom-express')();
+var app = require('./conf/express')();
 
 require('./conf/database')('mongodb://localhost/album');
 
