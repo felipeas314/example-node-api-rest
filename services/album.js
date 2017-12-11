@@ -33,14 +33,33 @@ module.exports = app => {
 
     service.buscaPorId = (req, res) => {
 
+        model.findById(req.params.id)
+            .then(album => {
+                res.json(album);
+            }, error => {
+                res.json(error);
+            });
     }
 
     service.deleta = (req, res) => {
 
+        model.remove({'_id' : req.params.id})
+            .then( () => {
+                res.sendStatus(200);
+            }, error => {
+                res.json(error);
+            });
     }
 
     service.atualiza = (req, res) => {
 
+        model.findByIdAndUpdate(req.params.id,req.body)
+            .then( album => {
+                console.log(album);
+            }, error => {
+                console.log(error);
+                res.sendStatus(500);
+            });
     }
     return service;
 }
