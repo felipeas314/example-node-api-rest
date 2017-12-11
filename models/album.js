@@ -11,6 +11,10 @@ var schema = mongoose.Schema({
     gravadora: {
         type: String,
         required: true
+    },
+    dataDeLancamento: {
+        type: String,
+        required: true
     }
 });
 

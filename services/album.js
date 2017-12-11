@@ -1,17 +1,15 @@
 var mongoose = require('mongoose');
 
-module.exports = app =>{
+module.exports = app => {
 
     var service = {};
 
     let model = mongoose.model('Album');
 
-    console.log('albuns');
-
-    service.lista = (req,res) => {
+    service.lista = (req, res) => {
 
         model.find()
-            .then( albuns => {
+            .then(albuns => {
                 res.json(albuns);
             }, error => {
                 console.log(error);
@@ -20,9 +18,7 @@ module.exports = app =>{
 
     }
 
-    service.adiciona = (req,res) => {
-
-        console.log('adiicona');
+    service.adiciona = (req, res) => {
 
         model.create(req.body)
             .then(album => {
@@ -35,5 +31,16 @@ module.exports = app =>{
 
     }
 
+    service.buscaPorId = (req, res) => {
+
+    }
+
+    service.deleta = (req, res) => {
+
+    }
+
+    service.atualiza = (req, res) => {
+
+    }
     return service;
 }
