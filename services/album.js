@@ -55,7 +55,7 @@ module.exports = app => {
 
         model.findByIdAndUpdate(req.params.id,req.body)
             .then( album => {
-                console.log(album);
+                res.json(album);
             }, error => {
                 console.log(error);
                 res.sendStatus(500);
