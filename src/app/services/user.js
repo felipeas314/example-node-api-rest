@@ -1,41 +1,75 @@
-let mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const User = require('../models/user');
 
 module.exports = {
 
-    adiciona: (req, res) => {
+    create: async (req, res) => {
 
-        model.create(req.body)
-            .then(user => {
-                res.json(user);
-            }, error => {
-                res.json(error);
-            });
+        const { email } = req.body;
+
+        const verifyEmail = await User.find({ email });
+
+        if (verifyEmail) {
+            return res.status(400).json({
+                status: "BAD_REQUEST",
+                message: "Email already exists",
+                data: new Date(),
+            })
+        }
+
+        let passwordHash = await bcrypt.hash(req.body.password, 10);
+
+        const user = User.create({ ...req.body, password: passwordHash });
+
+        res.status(201).json({
+            status: 'CREATED',
+            message: 'User Created',
+            content: user,
+            data: new Date(),
+        });
     },
 
-    buscaPorId: (req, res) => {
+    findById: (req, res) => {
 
-        model.findById(req.params.id)
-            .then(user => {
-                res.json(user);
-            }, error => {
-                res.json(error);
+        const { id } = req.params;
+
+        const user = User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                status: "NOT_FOUND",
+                message: 'User not exists',
+                data: new Date(),
             });
+        }
+
+        res.status(200).json({
+            content: user,
+            data: new Date(),
+            status: 'OK',
+            message: 'User was found successfully '
+        });
     },
 
-    lista: async (req, res) => {
+    list: async (req, res) => {
+
+        const quantity = await User.countDocuments();
 
         const users = await User.find();
 
         res.status(200).json({
             content: users,
-            status: 'OK'
+            status: 'OK',
+            message: 'List of users',
+            data: new Date(),
+            quantity
         })
     },
 
     deleta: (req, res) => {
 
-        model.remove({ '_id': req.params.id })
+        User.remove({ '_id': req.params.id })
             .then(() => {
                 res.sendStatus(200);
             }, error => {
@@ -45,7 +79,7 @@ module.exports = {
 
     atualiza: (req, res) => {
 
-        model.finndByIdAndUpdate(req.params.id, req.body)
+        User.finndByIdAndUpdate(req.params.id, req.body)
             .then(user => {
                 res.json(user);
             }, error => {
