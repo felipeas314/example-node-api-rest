@@ -1,4 +1,6 @@
-module.exports = function (uri) {
+module.exports = () => {
+
+    const uri = process.env.DATABASE || `mongodb://172.17.0.3/music`
 
     var mongoose = require('mongoose');
 

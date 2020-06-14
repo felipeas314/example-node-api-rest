@@ -1,55 +1,52 @@
 let mongoose = require('mongoose');
+const User = require('../models/user');
 
-module.exports = app => {
+module.exports = {
 
-    let service = {};
+    adiciona: (req, res) => {
 
-    let model = mongoose.model('User');
-
-    service.adiciona = (req, res) => {
-        
         model.create(req.body)
-            .then( user => {
+            .then(user => {
                 res.json(user);
             }, error => {
                 res.json(error);
             });
-    }
+    },
 
-    service.buscaPorId = (req, res) => {
+    buscaPorId: (req, res) => {
 
         model.findById(req.params.id)
             .then(user => {
                 res.json(user);
-            },error => {
-                res.json(error);
-            }); 
-    }
-
-    service.lista = (req, res) => {
-
-        model.find()
-            .then(albuns => {
-                res.json(albuns);
             }, error => {
                 res.json(error);
             });
-    }
+    },
 
-    service.deleta = (req, res) => {
+    lista: async (req, res) => {
 
-        model.remove({'_id':req.params.id})
-            .then( () => {
+        const users = await User.find();
+
+        res.status(200).json({
+            content: users,
+            status: 'OK'
+        })
+    },
+
+    deleta: (req, res) => {
+
+        model.remove({ '_id': req.params.id })
+            .then(() => {
                 res.sendStatus(200);
             }, error => {
                 res.json(error);
             });
-    }
+    },
 
-    service.atualiza = (req, res) => {
+    atualiza: (req, res) => {
 
-        model.finndByIdAndUpdate(req.params.id,req.body)
-            .then( user => {
+        model.finndByIdAndUpdate(req.params.id, req.body)
+            .then(user => {
                 res.json(user);
             }, error => {
                 console.log(error);
@@ -57,5 +54,4 @@ module.exports = app => {
             })
     }
 
-    return service;
 }

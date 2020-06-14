@@ -1,8 +1,12 @@
-var http = require('http');
-var app = require('./conf/express')();
+const express = require('express');
 
-require('./conf/database')('mongodb://localhost/album');
+require('./app/configurations/database')();
+const routes = require('./routes');
 
-app.listen(3000, function(){
-  console.log('Servidor rodando na porta 3000.');
-});
+let server = express();
+
+server.use(express.json());
+server.use('/api/v1', routes);
+
+
+module.exports = server;
