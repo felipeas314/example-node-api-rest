@@ -8,8 +8,8 @@ module.exports = {
 
         const { email } = req.body;
 
-        const verifyEmail = await User.find({ email });
-
+        const verifyEmail = await User.findOne({email});
+        console.log(verifyEmail);
         if (verifyEmail) {
             return res.status(400).json({
                 status: "BAD_REQUEST",
@@ -20,7 +20,7 @@ module.exports = {
 
         let passwordHash = await bcrypt.hash(req.body.password, 10);
 
-        const user = User.create({ ...req.body, password: passwordHash });
+        const user = await User.create({ ...req.body, password: passwordHash });
 
         res.status(201).json({
             status: 'CREATED',
@@ -30,11 +30,13 @@ module.exports = {
         });
     },
 
-    findById: (req, res) => {
+    findById: async (req, res) => {
 
         const { id } = req.params;
 
-        const user = User.findById(id);
+        const user = await User.findById(id);
+
+        console.log(user);
 
         if (!user) {
             return res.status(404).json({
@@ -67,14 +69,28 @@ module.exports = {
         })
     },
 
-    deleta: (req, res) => {
+    delete: async (req, res) => {
 
-        User.remove({ '_id': req.params.id })
-            .then(() => {
-                res.sendStatus(200);
-            }, error => {
-                res.json(error);
+        const { id } = req.params;
+
+        const user = await User.findById(id);
+
+        console.log(user);
+
+        if (!user) {
+            return res.status(404).json({
+                status: "NOT_FOUND",
+                message: 'User not exists',
+                data: new Date(),
             });
+        }
+
+        await User.deleteOne({_id: id});
+
+        res.status(200).json({
+            data: new Date(),
+            status: 'OK'
+        });
     },
 
     atualiza: (req, res) => {

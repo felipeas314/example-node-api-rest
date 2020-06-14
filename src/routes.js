@@ -14,7 +14,13 @@ routes.get('/health', (req, res) => {
 
 const SERVICE_USERS = '/users';
 
+
 routes.get(SERVICE_USERS, userService.list);
 
+routes.get(`${SERVICE_USERS}/:id`, userService.findById);
+
+routes.put(`${SERVICE_USERS}/:id`, userService.delete);
+
+routes.post(SERVICE_USERS, userService.create);
 
 module.exports = routes;
