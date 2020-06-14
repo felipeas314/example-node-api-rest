@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const yup = require('yup');
 
 const User = require('../models/user');
 
@@ -7,6 +8,14 @@ module.exports = {
     create: async (req, res) => {
 
         const { email } = req.body;
+
+        let schema = yup.object().shape({
+            name: yup.string().required(),
+            email: yup.string().required(),
+            password: yup.string().required()
+        })
+
+        await schema.validate(req.body);
 
         const verifyEmail = await User.findOne({email});
         console.log(verifyEmail);

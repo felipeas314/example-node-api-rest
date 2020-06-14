@@ -1,4 +1,7 @@
 const { Router } = require('express');
+const asyncHandler = require('express-async-handler')
+
+const handleValidation = require('./app/middlewares/validation-errors');
 
 const routes = new Router();
 
@@ -21,6 +24,8 @@ routes.get(`${SERVICE_USERS}/:id`, userService.findById);
 
 routes.put(`${SERVICE_USERS}/:id`, userService.delete);
 
-routes.post(SERVICE_USERS, userService.create);
+routes.post(SERVICE_USERS, asyncHandler(userService.create));
+
+routes.use(handleValidation);
 
 module.exports = routes;
