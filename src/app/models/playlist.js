@@ -10,10 +10,16 @@ const schema = mongoose.Schema({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'user',
     required: true
   },
-
+  musics: [
+    musicSchema
+  ],
+  created_at: {
+    type: Date,
+    required: true
+  }
 });
 
 const User = mongoose.model('playlist', schema);

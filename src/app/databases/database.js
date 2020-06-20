@@ -4,7 +4,7 @@ module.exports = () => {
 
     var mongoose = require('mongoose');
 
-    mongoose.connect(uri);
+    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
     mongoose.connection.on('connected', function () {
         console.log('Conectado ao MongoDB')
